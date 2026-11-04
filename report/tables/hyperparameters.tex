@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{All configuration values (\texttt{configs/config.py}); experiments override only the swept field.}
+\label{tab:hyperparameters}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{ll}
+\toprule
+Field & Default value \\
+\midrule
+seed & 42 \\
+split\_seed & 42 \\
+dataset & tb \\
+data\_root & ./data \\
+image\_size & 64 \\
+batch\_size & 32 \\
+subset\_train\_size & 200 \\
+subset\_val\_size & 60 \\
+subset\_test\_size & 60 \\
+tb\_root & ./data/tb\_raw/TB\_Chest\_Radiography\_Database \\
+val\_frac & 0.15 \\
+test\_frac & 0.15 \\
+train\_fraction & 1.0 \\
+input\_transform & none \\
+quanv\_layers & 1 \\
+quanv\_seed & 0 \\
+backbone\_name & small\_cnn \\
+conv1\_channels & 8 \\
+conv2\_channels & 16 \\
+embedding\_dim & 32 \\
+n\_qubits & 4 \\
+circuit\_depth & 2 \\
+encoding & angle \\
+entanglement & strong \\
+lr & 0.001 \\
+pretrained\_lr\_scale & 0.1 \\
+epochs & 15 \\
+restore\_best & False \\
+results\_dir & ./results/tb \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Backbone $\times$ head comparison: mean $\pm$ standard deviation over seeds 42, 43 and 44 on the fixed test set.}
+\label{tab:comparison}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Model & Params & Accuracy (\%) & Precision & Recall & F1 & ROC-AUC & Time (s) \\
+\midrule
+CNN + classical & 132,385 & 98.04 $\pm$ 0.56 & 0.9326 $\pm$ 0.0286 & 0.9524 $\pm$ 0.0381 & 0.9418 $\pm$ 0.0172 & 0.9975 $\pm$ 0.0004 & 16 \\
+CNN + quantum & 132,513 & 98.41 $\pm$ 0.32 & 0.9612 $\pm$ 0.0094 & 0.9429 $\pm$ 0.0165 & 0.9519 $\pm$ 0.0098 & 0.9980 $\pm$ 0.0014 & 46 \\
+ResNet18 + classical & 11,192,961 & 99.21 $\pm$ 0.57 & 0.9875 $\pm$ 0.0216 & 0.9651 $\pm$ 0.0361 & 0.9758 $\pm$ 0.0178 & 0.9991 $\pm$ 0.0006 & 314 \\
+ResNet18 + quantum & 11,193,089 & 99.47 $\pm$ 0.18 & 0.9936 $\pm$ 0.0056 & 0.9746 $\pm$ 0.0145 & 0.9839 $\pm$ 0.0057 & 0.9961 $\pm$ 0.0046 & 346 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

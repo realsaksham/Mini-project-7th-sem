@@ -1,0 +1,96 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+\section{Motivation}
+Tuberculosis is caused by the bacterium \emph{Mycobacterium tuberculosis}
+and most often affects the lungs. According to the World Health
+Organization, it was again the world's leading cause of death from a single
+infectious agent in 2023, with an estimated 10.8 million people falling ill
+and about 1.25 million deaths~\cite{who2024}. India carries the largest
+share of the global burden, which makes early and cheap detection a
+public-health priority in our own context.
+
+Chest radiography is one of the main tools for TB screening. It is fast and
+inexpensive, but every image must be read by a trained radiologist, and in
+high-burden regions radiologists are scarce. The WHO therefore recommends
+computer-aided detection software as an option for screening
+adults~\cite{who2021screening}, and an independent evaluation of five
+commercial products in Bangladesh found that all of them outperformed
+experienced radiologists at the operating points studied~\cite{qin2021}.
+
+Such systems are built on convolutional neural networks
+(CNNs)~\cite{lecun1998}. Since a deep CNN won the ImageNet
+challenge~\cite{krizhevsky2012, deng2009}, deep learning has become the
+standard approach in computer vision~\cite{lecun2015} and in medical image
+analysis~\cite{litjens2017}; large public collections such as
+ChestX-ray8~\cite{wang2017} made it possible to train radiograph classifiers
+that approach radiologist-level performance~\cite{rajpurkar2017}. For TB,
+ImageNet-pretrained CNNs reach accuracies in the high nineties on public
+datasets~\cite{rahman2020}.
+
+Quantum computing offers a different model of computation. Feynman observed
+that quantum systems are exponentially expensive to simulate
+classically~\cite{feynman1982}; Shor's factoring algorithm~\cite{shor1997}
+and Grover's search algorithm~\cite{grover1996} showed provable speed-ups
+for specific problems; and in 2019 a 53-qubit processor performed a sampling
+task argued to be beyond classical supercomputers~\cite{arute2019}. Present
+devices, however, belong to the \emph{noisy intermediate-scale quantum}
+(NISQ) era~\cite{preskill2018}: they have few qubits and every gate adds
+noise. The dominant NISQ approach to machine learning is the
+\emph{variational quantum circuit}, a short circuit with trainable rotation
+angles optimised by a classical computer like the weights of a neural
+network~\cite{schuld2020circuit, mitarai2018, farhi2018, benedetti2019}. The
+same principle underlies the variational quantum
+eigensolver~\cite{peruzzo2014, kandala2017}; the family of methods is
+reviewed in~\cite{cerezo2021vqa, schuld2018book}.
+
+Because current devices are small, practical models are \emph{hybrid}: a
+classical network handles the high-dimensional image and a small circuit is
+inserted at one point. In \emph{classical-to-quantum} transfer learning a
+CNN compresses the image into a few features that a circuit
+classifies~\cite{mari2020}; in a \emph{quanvolutional} network a circuit is
+slid over the image like a convolution filter~\cite{henderson2020}.
+PennyLane~\cite{bergholm2018} makes both kinds of model ordinary
+PyTorch~\cite{paszke2019} modules that can be trained by backpropagation
+through a simulator.
+
+\section{Problem Statement}
+Published hybrid models are often compared only with a classical model of
+a different size or structure, on a single run, so it is hard to tell
+whether the quantum circuit is responsible for the result. This project
+asks:
+
+\begin{quote}
+\emph{Does adding a small quantum circuit improve a CNN classifier for
+tuberculosis detection from chest X-rays, and does the answer depend on
+whether the circuit is placed after the classical feature extractor (\cq)
+or before it (\qc), once each hybrid is compared with a classical model of
+the same structure and size?}
+\end{quote}
+
+\section{Objectives and Contributions}
+The objectives were to build a reproducible pipeline for the TB Chest X-ray
+Database; to implement a classical CNN baseline, a \cq{} hybrid and a \qc{}
+hybrid together with classical controls matched to each hybrid; to study
+the effect of circuit design, backbone and training-set size with repeated
+seeds and paired statistical tests; and to analyse the circuits themselves.
+The main contributions are:
+\begin{enumerate}
+  \item A configurable PyTorch--PennyLane code base in which every
+        experiment differs from its reference in exactly one setting.
+  \item A comparison of both hybrid placements with a baseline and four
+        matched controls on five training-set sizes and three seeds
+        (105 training runs), a 12-configuration circuit ablation, and a
+        backbone $\times$ head study including pretrained ResNet18.
+  \item A quantitative analysis of the circuits: expressibility,
+        entangling capability, barren-plateau scaling, and robustness to
+        finite shots and depolarising noise.
+  \item An honest assessment: the \cq{} hybrid is consistently but not
+        significantly better than its controls, and the \qc{} hybrid's
+        parameter efficiency is reproduced by classical downsampling.
+\end{enumerate}
+
+Chapter~\ref{ch:related} reviews the background and related work,
+Chapter~\ref{ch:proposed} describes the data, models and protocol,
+Chapter~\ref{ch:results} presents and analyses the results, and
+Chapter~\ref{ch:conclusion} concludes.

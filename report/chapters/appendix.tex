@@ -1,0 +1,26 @@
+\chapter{Configuration and Reproduction}
+\label{app:config}
+Table~\ref{tab:hyperparameters} lists the fields of the configuration class
+in \texttt{configs/config.py} with their default values. Each experiment
+starts from these defaults and overrides only the field it studies.
+
+\input{tables/hyperparameters}
+
+\label{app:reproduce}
+With Python~3.10, the packages in \texttt{requirements.txt} and the dataset
+extracted into \texttt{data/tb\_raw/}, all results are produced from the
+project root by
+
+\begin{verbatim}
+python -m src.train --model baseline
+python -m src.train --model hybrid
+python -m src.ablation
+python -m src.compare
+python -m src.hybrid_study
+python -m src.quantum_analysis
+python report/build_assets.py
+\end{verbatim}
+
+\noindent Each script accepts \texttt{--subset} for a fast check on about 200
+images. All runs are seeded (split seed 42; training seeds 42, 43, 44), and
+results are written to \texttt{results/tb/}.

@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Main study on the full training set (2,940 images): mean $\pm$ std over three seeds. Head parameters count only the classifier head.}
+\label{tab:study_full}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Model & Params & Head & Accuracy (\%) & Recall & F1 & ROC-AUC & Time (s) \\
+\midrule
+Classical CNN & 132,385 & 33 & 97.67 $\pm$ 0.33 & 0.9238 $\pm$ 0.0095 & 0.9298 $\pm$ 0.0094 & 0.9966 $\pm$ 0.0009 & 15 \\
+CNN + matched classical head & 132,509 & 157 & 97.72 $\pm$ 0.40 & 0.9079 $\pm$ 0.0145 & 0.9301 $\pm$ 0.0119 & 0.9959 $\pm$ 0.0011 & 17 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 132,513 & 161 & 98.41 $\pm$ 0.32 & 0.9429 $\pm$ 0.0165 & 0.9519 $\pm$ 0.0098 & 0.9980 $\pm$ 0.0014 & 43 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 34,297 & 33 & 97.88 $\pm$ 0.33 & 0.9270 $\pm$ 0.0145 & 0.9359 $\pm$ 0.0096 & 0.9954 $\pm$ 0.0017 & 5 \\
+Random patch + CNN (control) & 34,297 & 33 & 90.53 $\pm$ 0.87 & 0.5206 $\pm$ 0.0715 & 0.6449 $\pm$ 0.0543 & 0.9336 $\pm$ 0.0035 & 4 \\
+Avg-pool + CNN (control) & 34,081 & 33 & 98.15 $\pm$ 0.09 & 0.9556 $\pm$ 0.0110 & 0.9451 $\pm$ 0.0020 & 0.9956 $\pm$ 0.0008 & 4 \\
+Learned 2x2 conv + CNN (control) & 34,317 & 33 & 98.31 $\pm$ 0.72 & 0.9524 $\pm$ 0.0000 & 0.9497 $\pm$ 0.0204 & 0.9956 $\pm$ 0.0033 & 7 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

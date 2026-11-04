@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Circuit ablation: effect of the number of qubits and encoding on the C$\rightarrow$Q hybrid (seed 42, test set unless marked val).}
+\label{tab:abl_qubits}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{rrllrrrrrrr}
+\toprule
+Qubits & Depth & Encoding & Entangl. & Val F1 & Acc. (\%) & Recall & F1 & AUC & Params & Time (s) \\
+\midrule
+2 & 2 & angle & strong & 0.9333 & 98.57 & 0.9429 & 0.9565 & 0.9969 & 132,433 & 30 \\
+4 & 2 & angle & strong & 0.9557 & 98.41 & 0.9333 & 0.9515 & 0.9987 & 132,513 & 44 \\
+6 & 2 & angle & strong & 0.9474 & 98.57 & 0.9619 & 0.9573 & 0.9978 & 132,593 & 58 \\
+8 & 2 & angle & strong & 0.9557 & 98.25 & 0.9238 & 0.9463 & 0.9981 & 132,673 & 72 \\
+2 & 2 & amplitude & strong & 0.9619 & 97.62 & 0.9429 & 0.9296 & 0.9924 & 132,499 & 28 \\
+4 & 2 & amplitude & strong & 0.9533 & 98.10 & 0.9333 & 0.9423 & 0.9976 & 132,909 & 37 \\
+6 & 2 & amplitude & strong & 0.9615 & 98.10 & 0.9429 & 0.9429 & 0.9967 & 134,507 & 48 \\
+8 & 2 & amplitude & strong & 0.9519 & 96.98 & 0.8952 & 0.9082 & 0.9961 & 140,857 & 63 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

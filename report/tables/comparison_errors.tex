@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Error breakdown on the 630 test images (seed 42). Images misclassified by at least one model: 22; by all four models: 1.}
+\label{tab:comparison_errors}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrr}
+\toprule
+Model & Errors & Missed TB (FN) & False alarms (FP) \\
+\midrule
+CNN + classical & 16 & 9 & 7 \\
+CNN + quantum & 10 & 7 & 3 \\
+ResNet18 + classical & 1 & 1 & 0 \\
+ResNet18 + quantum & 2 & 1 & 1 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

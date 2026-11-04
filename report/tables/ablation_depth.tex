@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Circuit ablation: effect of the circuit depth on the C$\rightarrow$Q hybrid (seed 42, test set unless marked val).}
+\label{tab:abl_depth}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{rrllrrrrrrr}
+\toprule
+Qubits & Depth & Encoding & Entangl. & Val F1 & Acc. (\%) & Recall & F1 & AUC & Params & Time (s) \\
+\midrule
+4 & 1 & angle & strong & 0.9619 & 98.25 & 0.9619 & 0.9484 & 0.9975 & 132,501 & 34 \\
+4 & 2 & angle & strong & 0.9557 & 98.41 & 0.9333 & 0.9515 & 0.9987 & 132,513 & 44 \\
+4 & 3 & angle & strong & 0.9417 & 98.25 & 0.9143 & 0.9458 & 0.9978 & 132,525 & 54 \\
+4 & 4 & angle & strong & 0.9423 & 98.25 & 0.9333 & 0.9469 & 0.9991 & 132,537 & 63 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

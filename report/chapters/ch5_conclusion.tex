@@ -1,0 +1,68 @@
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+\section{Conclusion}
+This project built and evaluated hybrid quantum--classical neural networks
+for detecting tuberculosis in chest radiographs, in two placements: a \cq{}
+model in which a CNN's features are classified by a four-qubit variational
+circuit, and a \qc{} model in which a four-qubit quanvolution filter
+transforms image patches before a CNN. Each hybrid was compared with
+classical controls of the same structure and size, with three seeds, five
+training-set sizes and paired McNemar tests, and the circuits were analysed
+directly. The main findings are:
+\begin{enumerate}
+  \item The \cq{} hybrid reached $98.41 \pm 0.32\%$ accuracy (F1
+        $0.952 \pm 0.010$) against $97.72 \pm 0.40\%$ for a matched
+        classical head and $97.67 \pm 0.33\%$ for the CNN; the gain was
+        consistent across seeds but not significant ($p = 0.09$--$1.00$).
+        With ResNet18 the quantum head reached $99.47 \pm 0.18\%$, and the
+        backbone mattered about three times more than the head.
+  \item The \qc{} hybrid matched the CNN with four times fewer parameters,
+        but so did average pooling and a learned $2\times2$ convolution: the
+        efficiency comes from downsampling, not from the quantum filter.
+  \item With 2\% of the data the \qc{} hybrid was the most stable model;
+        bottleneck heads were unstable, although the quantum head still
+        ranked images best (ROC-AUC 0.927).
+  \item Entanglement made the circuit 20--60 times more expressive but
+        changed accuracy by at most one test image; angle encoding was
+        consistently better than amplitude encoding.
+  \item Gradient variance halved with each added qubit, supporting small
+        circuits, and the trained model kept its accuracy with 10 shots and
+        depolarising noise up to $p = 0.2$, with exact parameter-shift
+        gradients, so it is directly transferable to NISQ hardware.
+\end{enumerate}
+Small quantum circuits can therefore be inserted into a medical image
+classifier without loss and, in the \cq{} placement, with a small,
+consistent gain, but at the scale that can be simulated today they give no
+statistically demonstrable advantage over an equally sized classical
+component.
+
+\section{Limitations}
+All circuits were simulated with 2 to 10 qubits, and noise was modelled by
+an idealised depolarising channel. Images were reduced to $64 \times 64$
+pixels, which may hide subtle findings. All results come from one public
+dataset whose normal and TB images were partly collected from different
+sources, so models may exploit acquisition differences such as markers and
+borders (Figure~\ref{fig:quanvmaps}), and performance on images from another
+hospital could be lower. With 630 test images and three seeds, differences
+below about one percentage point cannot be confirmed. The quanvolution
+filter was random and frozen, hyperparameters were shared rather than tuned
+per model, and training times were measured on a shared laptop.
+
+\section{Future Work}
+The trained \cq{} head should be run on a cloud quantum processor with the
+parameter-shift rule, readout error mitigation and zero-noise
+extrapolation~\cite{temme2017}. The quanvolution filter could be made
+trainable and deeper so that its entanglement can contribute, and data
+re-uploading circuits~\cite{perezsalinas2020} and quantum kernel
+methods~\cite{havlicek2019} should be compared with the present heads. The
+low-data collapse of bottleneck heads could be addressed by tuning the
+decision threshold on validation data or by a class-weighted loss. Training
+at $224 \times 224$ pixels and testing on independent collections such as
+the Montgomery and Shenzhen datasets~\cite{jaeger2014} would measure
+generalisation across sources, and saliency methods such as
+Grad-CAM~\cite{selvaraju2017} would show whether the models attend to the
+lungs rather than to markers, as Rahman et al.~\cite{rahman2020} did for
+classical models. More seeds and cross-validation would provide the
+statistical power needed to confirm or reject the small advantage of the
+\cq{} head.

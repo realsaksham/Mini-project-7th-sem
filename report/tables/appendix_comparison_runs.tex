@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Per-seed results of the backbone $\times$ head comparison.}
+\label{tab:app_comparison_runs}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & Seed & Acc. (\%) & Prec. & Recall & F1 & AUC & Val F1 & Time (s) \\
+\midrule
+CNN + classical & 42 & 97.46 & 0.9320 & 0.9143 & 0.9231 & 0.9972 & 0.9463 & 16 \\
+CNN + classical & 43 & 98.10 & 0.9043 & 0.9905 & 0.9455 & 0.9973 & 0.9273 & 16 \\
+CNN + classical & 44 & 98.57 & 0.9615 & 0.9524 & 0.9569 & 0.9980 & 0.9577 & 15 \\
+CNN + quantum & 42 & 98.41 & 0.9703 & 0.9333 & 0.9515 & 0.9987 & 0.9557 & 44 \\
+CNN + quantum & 43 & 98.73 & 0.9619 & 0.9619 & 0.9619 & 0.9989 & 0.9615 & 43 \\
+CNN + quantum & 44 & 98.10 & 0.9515 & 0.9333 & 0.9423 & 0.9964 & 0.9557 & 50 \\
+ResNet18 + classical & 42 & 99.84 & 1.0000 & 0.9905 & 0.9952 & 0.9998 & 1.0000 & 330 \\
+ResNet18 + classical & 43 & 99.05 & 0.9626 & 0.9810 & 0.9717 & 0.9986 & 0.9677 & 306 \\
+ResNet18 + classical & 44 & 98.73 & 1.0000 & 0.9238 & 0.9604 & 0.9989 & 0.9557 & 307 \\
+ResNet18 + quantum & 42 & 99.68 & 0.9905 & 0.9905 & 0.9905 & 0.9987 & 0.9953 & 340 \\
+ResNet18 + quantum & 43 & 99.37 & 0.9903 & 0.9714 & 0.9808 & 0.9988 & 0.9855 & 370 \\
+ResNet18 + quantum & 44 & 99.37 & 1.0000 & 0.9619 & 0.9806 & 0.9907 & 0.9904 & 326 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

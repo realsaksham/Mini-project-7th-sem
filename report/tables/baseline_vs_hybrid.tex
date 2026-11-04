@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Single-run comparison of the classical baseline and the C$\rightarrow$Q hybrid (seed 42, full training set, 630 test images).}
+\label{tab:baseline_vs_hybrid}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrr}
+\toprule
+Metric & Classical CNN & C$\rightarrow$Q hybrid \\
+\midrule
+Accuracy (\%) & 97.46 & 98.41 \\
+Precision & 0.9320 & 0.9703 \\
+Recall & 0.9143 & 0.9333 \\
+F1-score & 0.9231 & 0.9515 \\
+ROC-AUC & 0.9972 & 0.9987 \\
+Trainable parameters & 132,385 & 132,513 \\
+Training time (s) & 25.9 & 84.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

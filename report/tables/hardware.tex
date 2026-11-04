@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Trained C$\rightarrow$Q model (seed 42) evaluated with finite measurement shots and with depolarising noise after every circuit layer (density-matrix simulation), 630 test images.}
+\label{tab:hardware}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrr}
+\toprule
+Setting & Accuracy (\%) & Recall & F1 & ROC-AUC \\
+\midrule
+Exact simulator & 98.41 & 0.9333 & 0.9515 & 0.9987 \\
+10 shots & 98.25 & 0.9333 & 0.9469 & 0.9979 \\
+50 shots & 98.57 & 0.9333 & 0.9561 & 0.9980 \\
+100 shots & 98.57 & 0.9333 & 0.9561 & 0.9985 \\
+500 shots & 98.25 & 0.9238 & 0.9463 & 0.9987 \\
+1,000 shots & 98.41 & 0.9333 & 0.9515 & 0.9986 \\
+10,000 shots & 98.25 & 0.9238 & 0.9463 & 0.9986 \\
+Depolarising $p=0.001$ & 98.41 & 0.9333 & 0.9515 & 0.9987 \\
+Depolarising $p=0.005$ & 98.41 & 0.9333 & 0.9515 & 0.9987 \\
+Depolarising $p=0.01$ & 98.41 & 0.9333 & 0.9515 & 0.9987 \\
+Depolarising $p=0.02$ & 98.41 & 0.9333 & 0.9515 & 0.9987 \\
+Depolarising $p=0.05$ & 98.41 & 0.9238 & 0.9510 & 0.9987 \\
+Depolarising $p=0.1$ & 98.41 & 0.9238 & 0.9510 & 0.9987 \\
+Depolarising $p=0.2$ & 98.57 & 0.9238 & 0.9557 & 0.9987 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

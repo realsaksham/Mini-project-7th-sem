@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Circuit ablation: effect of the entanglement pattern on the C$\rightarrow$Q hybrid (seed 42, test set unless marked val).}
+\label{tab:abl_ent}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{rrllrrrrrrr}
+\toprule
+Qubits & Depth & Encoding & Entangl. & Val F1 & Acc. (\%) & Recall & F1 & AUC & Params & Time (s) \\
+\midrule
+4 & 2 & angle & strong & 0.9557 & 98.41 & 0.9333 & 0.9515 & 0.9987 & 132,513 & 44 \\
+4 & 2 & angle & basic & 0.9216 & 98.41 & 0.9333 & 0.9515 & 0.9984 & 132,497 & 38 \\
+4 & 2 & angle & none & 0.9519 & 98.25 & 0.9524 & 0.9479 & 0.9981 & 132,513 & 40 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

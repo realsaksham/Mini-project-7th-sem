@@ -1,0 +1,12 @@
+__pycache__/
+data/tb_raw/
+data/tb_chest_xray_*.npz
+data/quanv_*.npz
+data/randpatch_*.npz
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.lof
+report/*.log
+report/*.lot
+report/*.toc

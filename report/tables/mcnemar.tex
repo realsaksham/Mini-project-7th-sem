@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{McNemar exact test between each hybrid and a classical comparator on the full-data runs. Each cell gives the p-value and, in brackets, the number of test images only the hybrid got right / only the comparator got right.}
+\label{tab:mcnemar}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{llrrr}
+\toprule
+Hybrid & Compared with & Seed 42 & Seed 43 & Seed 44 \\
+\midrule
+C$\rightarrow$Q hybrid (CNN + quantum head) & CNN + matched classical head & 0.092 (10/3) & 0.146 (9/3) & 1.000 (7/7) \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & Random patch + CNN (control) & $<$0.001 (57/2) & $<$0.001 (49/7) & $<$0.001 (50/8) \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & Avg-pool + CNN (control) & 1.000 (5/4) & 0.344 (3/7) & 0.791 (6/8) \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & Learned 2x2 conv + CNN (control) & 1.000 (4/4) & 1.000 (6/6) & 0.057 (3/11) \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & Classical CNN & 0.424 (9/5) & 0.227 (8/3) & 0.267 (9/4) \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & Classical CNN & 0.453 (5/2) & 0.804 (7/9) & 0.581 (8/5) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Per-seed results of the main study on the full training set.}
+\label{tab:app_study_runs}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & Seed & Acc. (\%) & Prec. & Recall & F1 & AUC & Val F1 & Time (s) \\
+\midrule
+Classical CNN & 42 & 97.78 & 0.9505 & 0.9143 & 0.9320 & 0.9960 & 0.9412 & 15 \\
+Classical CNN & 43 & 97.94 & 0.9423 & 0.9333 & 0.9378 & 0.9976 & 0.9320 & 15 \\
+Classical CNN & 44 & 97.30 & 0.9151 & 0.9238 & 0.9194 & 0.9962 & 0.9372 & 14 \\
+CNN + matched classical head & 42 & 97.30 & 0.9314 & 0.9048 & 0.9179 & 0.9946 & 0.9417 & 18 \\
+CNN + matched classical head & 43 & 97.78 & 0.9691 & 0.8952 & 0.9307 & 0.9965 & 0.9216 & 17 \\
+CNN + matched classical head & 44 & 98.10 & 0.9604 & 0.9238 & 0.9417 & 0.9967 & 0.9612 & 16 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 42 & 98.41 & 0.9703 & 0.9333 & 0.9515 & 0.9987 & 0.9557 & 42 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 43 & 98.73 & 0.9619 & 0.9619 & 0.9619 & 0.9989 & 0.9615 & 43 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 44 & 98.10 & 0.9515 & 0.9333 & 0.9423 & 0.9964 & 0.9557 & 43 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 42 & 98.25 & 0.9700 & 0.9238 & 0.9463 & 0.9973 & 0.9561 & 5 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 43 & 97.62 & 0.9412 & 0.9143 & 0.9275 & 0.9938 & 0.9519 & 5 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 44 & 97.78 & 0.9252 & 0.9429 & 0.9340 & 0.9952 & 0.9429 & 5 \\
+Random patch + CNN (control) & 42 & 89.52 & 0.8679 & 0.4381 & 0.5823 & 0.9367 & 0.6220 & 4 \\
+Random patch + CNN (control) & 43 & 90.95 & 0.8429 & 0.5619 & 0.6743 & 0.9298 & 0.6778 & 4 \\
+Random patch + CNN (control) & 44 & 91.11 & 0.8551 & 0.5619 & 0.6782 & 0.9342 & 0.6404 & 4 \\
+Avg-pool + CNN (control) & 42 & 98.10 & 0.9266 & 0.9619 & 0.9439 & 0.9948 & 0.9515 & 4 \\
+Avg-pool + CNN (control) & 43 & 98.25 & 0.9519 & 0.9429 & 0.9474 & 0.9964 & 0.9479 & 4 \\
+Avg-pool + CNN (control) & 44 & 98.10 & 0.9266 & 0.9619 & 0.9439 & 0.9955 & 0.9412 & 5 \\
+Learned 2x2 conv + CNN (control) & 42 & 98.25 & 0.9434 & 0.9524 & 0.9479 & 0.9971 & 0.9528 & 7 \\
+Learned 2x2 conv + CNN (control) & 43 & 97.62 & 0.9091 & 0.9524 & 0.9302 & 0.9919 & 0.9423 & 7 \\
+Learned 2x2 conv + CNN (control) & 44 & 99.05 & 0.9901 & 0.9524 & 0.9709 & 0.9980 & 0.9353 & 7 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

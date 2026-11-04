@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Test F1 (mean $\pm$ std, three seeds) versus the fraction of the training split used. Validation and test sets are never reduced.}
+\label{tab:study_lowdata}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & 2\% (58) & 5\% (147) & 10\% (294) & 25\% (735) & 100\% (2940) \\
+\midrule
+Classical CNN & 0.601 $\pm$ 0.170 & 0.815 $\pm$ 0.027 & 0.880 $\pm$ 0.009 & 0.909 $\pm$ 0.008 & 0.930 $\pm$ 0.009 \\
+CNN + matched classical head & 0.000 $\pm$ 0.000 & 0.263 $\pm$ 0.455 & 0.876 $\pm$ 0.010 & 0.309 $\pm$ 0.535 & 0.930 $\pm$ 0.012 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 0.341 $\pm$ 0.250 & 0.787 $\pm$ 0.064 & 0.850 $\pm$ 0.077 & 0.871 $\pm$ 0.080 & 0.952 $\pm$ 0.010 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 0.677 $\pm$ 0.020 & 0.754 $\pm$ 0.093 & 0.834 $\pm$ 0.028 & 0.884 $\pm$ 0.015 & 0.936 $\pm$ 0.010 \\
+Random patch + CNN (control) & 0.000 $\pm$ 0.000 & 0.416 $\pm$ 0.086 & 0.456 $\pm$ 0.065 & 0.490 $\pm$ 0.052 & 0.645 $\pm$ 0.054 \\
+Avg-pool + CNN (control) & 0.666 $\pm$ 0.138 & 0.749 $\pm$ 0.099 & 0.862 $\pm$ 0.020 & 0.892 $\pm$ 0.011 & 0.945 $\pm$ 0.002 \\
+Learned 2x2 conv + CNN (control) & 0.451 $\pm$ 0.076 & 0.705 $\pm$ 0.155 & 0.768 $\pm$ 0.092 & 0.857 $\pm$ 0.075 & 0.950 $\pm$ 0.020 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Test ROC-AUC (mean $\pm$ std, three seeds) versus the fraction of the training split used.}
+\label{tab:study_lowdata_auc}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & 2\% & 5\% & 10\% & 25\% & 100\% \\
+\midrule
+Classical CNN & 0.911 $\pm$ 0.027 & 0.952 $\pm$ 0.010 & 0.977 $\pm$ 0.002 & 0.986 $\pm$ 0.001 & 0.997 $\pm$ 0.001 \\
+CNN + matched classical head & 0.918 $\pm$ 0.027 & 0.909 $\pm$ 0.072 & 0.975 $\pm$ 0.004 & 0.930 $\pm$ 0.097 & 0.996 $\pm$ 0.001 \\
+C$\rightarrow$Q hybrid (CNN + quantum head) & 0.927 $\pm$ 0.025 & 0.965 $\pm$ 0.006 & 0.970 $\pm$ 0.009 & 0.985 $\pm$ 0.013 & 0.998 $\pm$ 0.001 \\
+Q$\rightarrow$C hybrid (quanvolution + CNN) & 0.907 $\pm$ 0.036 & 0.947 $\pm$ 0.017 & 0.968 $\pm$ 0.005 & 0.981 $\pm$ 0.004 & 0.995 $\pm$ 0.002 \\
+Random patch + CNN (control) & 0.808 $\pm$ 0.038 & 0.893 $\pm$ 0.005 & 0.901 $\pm$ 0.005 & 0.906 $\pm$ 0.005 & 0.934 $\pm$ 0.003 \\
+Avg-pool + CNN (control) & 0.907 $\pm$ 0.032 & 0.942 $\pm$ 0.017 & 0.970 $\pm$ 0.004 & 0.980 $\pm$ 0.004 & 0.996 $\pm$ 0.001 \\
+Learned 2x2 conv + CNN (control) & 0.886 $\pm$ 0.031 & 0.923 $\pm$ 0.029 & 0.959 $\pm$ 0.017 & 0.972 $\pm$ 0.010 & 0.996 $\pm$ 0.003 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

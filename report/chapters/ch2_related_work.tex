@@ -1,0 +1,180 @@
+\chapter{Related Work}
+\label{ch:related}
+
+\section{Convolutional Neural Networks}
+\label{sec:rw_cnn}
+A CNN applies small learned filters across the whole image~\cite{lecun1998}.
+A convolutional layer with $C_{\mathrm{in}}$ input channels,
+$C_{\mathrm{out}}$ output channels and a $k \times k$ kernel has
+$C_{\mathrm{out}}(C_{\mathrm{in}}k^2 + 1)$ parameters, independently of the
+image size, and recognises a feature wherever it appears. Each convolution
+is followed by a non-linearity, usually $\mathrm{ReLU}(z) = \max(0,
+z)$~\cite{nair2010}, and by pooling that reduces the resolution; fully
+connected layers then map the features to class scores~\cite{goodfellow2016}.
+For a binary task the output $z$ is turned into a probability
+$\hat p = \sigma(z) = 1/(1+e^{-z})$ and the network is trained by minimising
+the binary cross-entropy
+\begin{equation}
+\mathcal{L} = -\frac{1}{B}\sum_{b=1}^{B}\Big[y_b \log \hat{p}_b + (1-y_b)\log(1-\hat{p}_b)\Big]
+\label{eq:bce}
+\end{equation}
+over mini-batches of $B$ labelled examples, with gradients from
+backpropagation and a stochastic optimiser such as Adam~\cite{kingma2015}.
+
+Deep architectures such as VGG~\cite{simonyan2015} and
+ResNet~\cite{he2016}, whose residual connections make very deep networks
+trainable, were developed on ImageNet~\cite{deng2009}. Their early layers
+learn generic features that transfer well to other tasks~\cite{yosinski2014},
+so fine-tuning a pretrained network is the standard approach when labelled
+medical data is scarce~\cite{litjens2017}.
+
+\section{Deep Learning for Tuberculosis Detection}
+\label{sec:rw_tb}
+The Montgomery and Shenzhen datasets of Jaeger et al.~\cite{jaeger2014}, with
+a few hundred radiographs each, were the first widely used TB benchmarks.
+Lakhani and Sundaram~\cite{lakhani2017} fine-tuned ImageNet-pretrained
+AlexNet and GoogLeNet on about a thousand radiographs and reached an area
+under the ROC curve of about 0.99 with an ensemble of the two. Pasa et
+al.~\cite{pasa2019} showed that a compact CNN with far fewer parameters
+reaches competitive accuracy, which supports the premise of this project
+that TB detection does not require a very large network.
+
+Rahman et al.~\cite{rahman2020} assembled the dataset used here, the TB
+Chest X-ray Database, from several public sources (3,500 normal and 700 TB
+images). They compared nine pretrained CNNs with and without lung
+segmentation and reported accuracies of about 98--99\%. Two points from
+their work recur in this report: the images come from different sources
+and acquisition conditions, and the best results use large networks on
+images of a few hundred pixels per side.
+
+\section{Quantum Computing Background}
+\label{sec:rw_qc}
+A qubit is a two-level system with basis states $\ket{0}$ and $\ket{1}$ and
+general state
+\begin{equation}
+\ket{\psi} = \alpha\ket{0} + \beta\ket{1}
+= \cos\tfrac{\theta}{2}\ket{0} + e^{i\phi}\sin\tfrac{\theta}{2}\ket{1},
+\qquad |\alpha|^2 + |\beta|^2 = 1,
+\end{equation}
+a point on the Bloch sphere~\cite{nielsen2010}. A register of $n$ qubits has
+$2^n$ complex amplitudes, which is why quantum systems are hard to simulate
+and why they may represent functions that are expensive for classical
+models~\cite{biamonte2017}. Computation uses unitary gates; the rotations
+used here are
+\begin{equation}
+R_Y(\theta) = \begin{pmatrix}\cos\frac{\theta}{2} & -\sin\frac{\theta}{2}\\[2pt]
+\sin\frac{\theta}{2} & \cos\frac{\theta}{2}\end{pmatrix},\qquad
+R_Z(\theta) = \begin{pmatrix}e^{-i\theta/2} & 0\\ 0 & e^{i\theta/2}\end{pmatrix},
+\end{equation}
+\begin{equation}
+\mathrm{Rot}(\phi,\theta,\omega) = R_Z(\omega)R_Y(\theta)R_Z(\phi),
+\end{equation}
+together with $R_X(\theta) = e^{-i\theta X/2}$, where $X, Y, Z$ are the Pauli
+matrices. The two-qubit CNOT gate flips its target when the control is
+$\ket{1}$; it creates \emph{entanglement}, correlations that cannot be
+described qubit by qubit.
+
+Measuring a qubit returns 0 or 1 with probabilities $|\alpha|^2$ and
+$|\beta|^2$, so quantum models output \emph{expectation values} estimated
+from many repeated runs (\emph{shots}):
+\begin{equation}
+\expval{Z_k} = \bra{\psi} Z_k \ket{\psi} = P(0) - P(1) \in [-1, 1].
+\label{eq:expz}
+\end{equation}
+With $N$ shots the estimate has variance $(1-\expval{Z_k}^2)/N$. Real devices
+are noisy and their state is a density matrix $\rho$; a common noise model
+is the depolarising channel
+\begin{equation}
+\mathcal{E}(\rho) = (1-p)\,\rho + \frac{p}{3}\left(X\rho X + Y\rho Y + Z\rho Z\right),
+\label{eq:depol}
+\end{equation}
+which drives every $\expval{Z_k}$ towards zero.
+
+\section{Variational Quantum Circuits}
+\label{sec:rw_vqc}
+A variational circuit applies a data encoding $S(\mathbf{x})$ and a
+trainable unitary $W(\boldsymbol{\theta})$ and measures,
+\begin{equation}
+f_k(\mathbf{x};\boldsymbol{\theta}) =
+\bra{0}^{\otimes n} S(\mathbf{x})^\dagger W(\boldsymbol{\theta})^\dagger\,
+Z_k\, W(\boldsymbol{\theta}) S(\mathbf{x}) \ket{0}^{\otimes n},
+\label{eq:vqc}
+\end{equation}
+and its outputs are fed to a classical loss. Schuld et
+al.~\cite{schuld2020circuit} proposed ``circuit-centric'' classifiers built
+from layers of general rotations and CNOTs at increasing distances, available
+in PennyLane as \texttt{StronglyEntanglingLayers}; Mitarai et
+al.~\cite{mitarai2018} showed that such circuits are universal function
+approximators when inputs are encoded non-linearly. Because the state
+cannot be read out on hardware, gradients are obtained with the
+\emph{parameter-shift rule}~\cite{mitarai2018, schuld2019grad},
+\begin{equation}
+\frac{\partial f}{\partial \theta_j} =
+\frac{1}{2}\left[ f\!\left(\theta_j + \tfrac{\pi}{2}\right) -
+f\!\left(\theta_j - \tfrac{\pi}{2}\right) \right],
+\label{eq:pshift}
+\end{equation}
+which is exact and costs two circuit runs per parameter. In simulation,
+backpropagation through the simulator gives the same gradient more cheaply.
+
+\label{sec:rw_encoding}
+The encoding largely determines what the circuit can
+compute~\cite{schuld2019feature}. \emph{Angle encoding} places one feature on
+each qubit, $\bigotimes_k R_Y(x_k)\ket{0}$; it needs $n$ qubits for $n$
+features and one gate per qubit. \emph{Amplitude encoding} writes a
+normalised vector of $2^n$ features into the amplitudes,
+$\ket{\psi(\mathbf{x})} = \lVert\mathbf{x}\rVert^{-1}\sum_i x_i\ket{i}$; it is
+exponentially compact but needs deep state preparation and discards the
+vector's length.
+
+\section{Hybrid Quantum--Classical Networks}
+\label{sec:rw_hybrid}
+Mari et al.~\cite{mari2020} formalised classical-to-quantum transfer
+learning: a pretrained network is truncated to a short feature vector that
+a ``dressed'' circuit, with classical layers before and after it,
+classifies. Our \cq{} model follows this design. Henderson et
+al.~\cite{henderson2020} introduced quanvolutional networks, in which a
+random, untrained circuit transforms each image patch; on MNIST these
+networks outperformed a plain CNN but performed similarly to a CNN with
+random non-linear classical filters, a finding that motivates the
+classical controls of our \qc{} model. The quantum convolutional network of
+Cong et al.~\cite{cong2019} is a different construction that acts on
+quantum input states with $\mathcal{O}(\log n)$ layers. Abbas et
+al.~\cite{abbas2021} argued from an effective-dimension measure that some
+quantum networks have higher capacity than comparable classical ones;
+capacity alone, however, does not guarantee better accuracy on a real task.
+Quantum kernel methods~\cite{havlicek2019} and data re-uploading
+circuits~\cite{perezsalinas2020} are further alternatives, discussed as
+future work.
+
+\section{Trainability and Circuit Quality}
+\label{sec:rw_quality}
+McClean et al.~\cite{mcclean2018} showed that for sufficiently random
+circuits the gradient variance vanishes exponentially with the number of
+qubits, $\mathrm{Var}[\partial C/\partial\theta_j] \in \mathcal{O}(2^{-\alpha
+n})$ --- a \emph{barren plateau}. Cerezo et al.~\cite{cerezo2021} showed that
+global costs can plateau even for shallow circuits, whereas local costs
+remain trainable. Sim et al.~\cite{sim2019} proposed two descriptors of a
+circuit: \emph{expressibility}, the Kullback--Leibler divergence between the
+distribution of fidelities $F$ of pairs of its random output states and that
+of Haar-random states, $P_{\mathrm{Haar}}(F) = (N-1)(1-F)^{N-2}$ with $N =
+2^n$ (lower is more expressive); and \emph{entangling capability}, the mean
+Meyer--Wallach measure~\cite{meyer2002}
+\begin{equation}
+Q(\ket{\psi}) = 2\left(1 - \frac{1}{n}\sum_{k=1}^{n}\mathrm{Tr}\!\left(\rho_k^2\right)\right),
+\end{equation}
+where $\rho_k$ is the reduced state of qubit $k$ ($Q = 0$ for product
+states). Holmes et al.~\cite{holmes2022} proved that the two properties
+conflict: the closer a circuit's states are to Haar-random, the smaller its
+gradients. On hardware, noise can additionally be reduced by error
+mitigation such as zero-noise extrapolation~\cite{temme2017}.
+
+\section{Research Gap}
+Hybrid models for medical images are usually reported with a single run
+and compared with a classical model that differs in size or structure, the
+two hybrid placements are rarely compared on the same data, and the
+circuits are seldom characterised beyond accuracy. This project evaluates
+both placements on one TB dataset against matched controls, with repeated
+seeds, several training-set sizes and paired significance tests, and
+combines these results with an analysis of the circuits' expressibility,
+trainability and noise robustness.

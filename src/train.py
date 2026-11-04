@@ -7,6 +7,9 @@ Usage:
     python -m src.train --model hybrid   --subset
     python -m src.train --model hybrid
 
+Add --dataset pneumoniamnist to run on PneumoniaMNIST instead of the default
+TB Chest X-ray dataset.
+
 Both --model choices go through the exact same train_model()/evaluate_model()
 code path (src/models.py's build_model() is the only thing that differs), so
 the classical-vs-hybrid comparison is controlled.
@@ -22,8 +25,8 @@ import pennylane as qml
 import torch
 import torch.nn as nn
 
-from configs.config import get_config
-from src.data import load_pneumoniamnist, set_seed
+from configs.config import DATASET_PRESETS, get_config
+from src.data import load_data, set_seed
 from src.evaluate import evaluate_model, save_confusion_matrix, save_metrics_json
 from src.models import build_model
 
@@ -43,10 +46,18 @@ def train_model(model, train_loader, val_loader, cfg, device="cpu"):
         duration_sec: wall-clock training time
     """
     model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr)
+    # Pretrained backbone weights (if any) get a smaller learning rate than
+    # the freshly initialized layers; for the custom CNN this is one group.
+    pretrained = (set(model.backbone.pretrained_parameters())
+                  if hasattr(model.backbone, "pretrained_parameters") else set())
+    groups = [{"params": [p for p in model.parameters() if p not in pretrained], "lr": cfg.lr}]
+    if pretrained:
+        groups.append({"params": list(pretrained), "lr": cfg.lr * cfg.pretrained_lr_scale})
+    optimizer = torch.optim.Adam(groups)
     criterion = nn.BCELoss()  # model already outputs a sigmoid probability
 
     history = []
+    best_val_loss, best_state = float("inf"), None
     start = time.perf_counter()
 
     for epoch in range(cfg.epochs):
@@ -86,6 +97,9 @@ def train_model(model, train_loader, val_loader, cfg, device="cpu"):
             "val_acc": val_correct / max(val_total, 1),
         }
         history.append(epoch_stats)
+        if cfg.restore_best and epoch_stats["val_loss"] < best_val_loss:
+            best_val_loss = epoch_stats["val_loss"]
+            best_state = {k: v.detach().clone() for k, v in model.state_dict().items()}
         print(f"  epoch {epoch_stats['epoch']}/{cfg.epochs} "
               f"train_loss={epoch_stats['train_loss']:.4f} "
               f"train_acc={epoch_stats['train_acc']:.4f} "
@@ -93,6 +107,8 @@ def train_model(model, train_loader, val_loader, cfg, device="cpu"):
               f"val_acc={epoch_stats['val_acc']:.4f}")
 
     duration_sec = time.perf_counter() - start
+    if best_state is not None:
+        model.load_state_dict(best_state)
     return history, duration_sec
 
 
@@ -119,16 +135,16 @@ def print_comparison_table(results_dir: str) -> None:
         print(f"{row:<18}{bv_s:>14}{hv_s:>14}")
 
 
-def run(model_type: str, subset: bool) -> None:
-    cfg = get_config(subset=subset)
+def run(model_type: str, subset: bool, dataset: str) -> None:
+    cfg = get_config(subset=subset, dataset=dataset)
     set_seed(cfg.seed)
     os.makedirs(cfg.results_dir, exist_ok=True)
 
     head_type = "classical" if model_type == "baseline" else "quantum"
-    print(f"[{model_type}] config: epochs={cfg.epochs} batch_size={cfg.batch_size} "
+    print(f"[{model_type}] config: dataset={cfg.dataset} epochs={cfg.epochs} batch_size={cfg.batch_size} "
           f"subset={subset} n_qubits={cfg.n_qubits} depth={cfg.circuit_depth}")
 
-    train_loader, val_loader, test_loader = load_pneumoniamnist(cfg, subset=subset)
+    train_loader, val_loader, test_loader = load_data(cfg, subset=subset)
     model = build_model(cfg, head_type=head_type)
 
     n_params = count_trainable_params(model)
@@ -142,8 +158,10 @@ def run(model_type: str, subset: bool) -> None:
     metrics["train_time_sec"] = duration_sec
     metrics["history"] = history
     metrics["config"] = {
+        "dataset": cfg.dataset, "image_size": cfg.image_size,
         "epochs": cfg.epochs, "batch_size": cfg.batch_size, "subset": subset,
         "n_qubits": cfg.n_qubits, "circuit_depth": cfg.circuit_depth,
+        "encoding": cfg.encoding, "entanglement": cfg.entanglement,
         "lr": cfg.lr, "seed": cfg.seed,
     }
 
@@ -158,6 +176,7 @@ def run(model_type: str, subset: bool) -> None:
         labels, preds,
         os.path.join(cfg.results_dir, f"confusion_matrix_{out_name}.png"),
         title=f"{model_type.capitalize()} Confusion Matrix",
+        class_names=cfg.class_names,
     )
 
     if model_type == "hybrid":
@@ -165,10 +184,9 @@ def run(model_type: str, subset: bool) -> None:
         # to drop straight into a report/slide and to sanity-check that the
         # AngleEmbedding/StronglyEntanglingLayers/measurement structure is
         # what we intended. Needs one concrete input to trace through.
-        dummy_inputs = torch.zeros(cfg.n_qubits)
-        dummy_weights = torch.zeros(
-            qml.StronglyEntanglingLayers.shape(n_layers=cfg.circuit_depth, n_wires=cfg.n_qubits)
-        )
+        # (ones, not zeros: amplitude encoding can't normalize a zero vector)
+        dummy_inputs = torch.ones(model.head.input_dim)
+        dummy_weights = torch.zeros(model.head.weight_shapes["weights"])
         diagram = qml.draw(model.head.circuit)(dummy_inputs, dummy_weights)
         # qml.draw's output uses unicode box-drawing / bra-ket characters that
         # Windows' default console codepage (cp1252) can't print -- fall back
@@ -189,8 +207,10 @@ def main():
     parser.add_argument("--model", choices=["baseline", "hybrid"], required=True)
     parser.add_argument("--subset", action="store_true",
                          help="Train on a small subset for fast debugging (~200 images, 2 epochs).")
+    parser.add_argument("--dataset", choices=list(DATASET_PRESETS), default="tb",
+                         help="Which dataset to train on (default: tb).")
     args = parser.parse_args()
-    run(args.model, args.subset)
+    run(args.model, args.subset, args.dataset)
 
 
 if __name__ == "__main__":
